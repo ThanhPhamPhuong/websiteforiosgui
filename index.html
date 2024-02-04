@@ -42,18 +42,6 @@
             });
         }
 
-        function runPython() {
-            // Make an AJAX request to the Python backend
-            fetch('/run_python_code')
-                .then(response => response.json())
-                .then(data => {
-                    s = document.getElementById('output').innerHTML = '<strong>Python Output:</strong> ' + data.result;
-                    alert(s)
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
     </script>
 
 </body>
