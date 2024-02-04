@@ -3,50 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Website Title</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        header {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 10px;
-            text-align: center;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #34495e;
-            color: #ecf0f1;
-            padding: 10px;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <title>Upload apk/zip</title>
 </head>
 <body>
-    <header>
-        <h1>Your Website Name</h1>
-    </header>
+    <h2>APKer Upload</h2>
+    <form id="fileUploadForm" enctype="multipart/form-data">
+        <label for="file">Choose a file (<500MB; zip, apk):</label>
+        <input type="file" id="file" name="file" accept=".zip, .apk">
+        <br>
+        <input type="button" value="Convert" onclick="uploadFile()">
+    </form>
 
-    <main>
-        <h2>Welcome to Our Website</h2>
-        <p>This is a sample content. Customize it based on your requirements.</p>
-    </main>
+    <script>
+        function uploadFile() {
+            var fileInput = document.getElementById('file');
+            var file = fileInput.files[0];
 
-    <footer>
-        &copy; 2024 Your Website Name. All rights reserved.
-    </footer>
+            var formData = new FormData();
+            formData.append('file', file);
+
+            fetch('https://file.io/?expires=1w', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('File uploaded successfully!');
+                    alert('Download link: ' + data.link);
+                } else {
+                    alert('Error uploading file.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </body>
 </html>
