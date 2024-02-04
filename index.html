@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload to File.io</title>
+    <title>File Upload to Gofile</title>
 </head>
 <body>
     <h2>File Upload Form</h2>
@@ -15,33 +15,25 @@
     </form>
 
     <script>
-        function uploadFile() {
+        async function uploadFile() {
             var fileInput = document.getElementById('file');
             var file = fileInput.files[0];
 
-            var formData = new FormData();
+            const formData = new FormData();
             formData.append('file', file);
 
-            fetch('https://file.io/?expires=1w', {
+            const uploadResponse = await fetch('https://gofile.io/uploadFile', {
                 method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('File uploaded successfully!');
-                    var downloadLink = document.createElement('a');
-                    downloadLink.href = data.link;
-                    downloadLink.target = '_blank';
-                    downloadLink.download = 'downloaded_file';
-                    downloadLink.click();
-                } else {
-                    alert('Error uploading file.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                body: formData,
             });
+
+            if (uploadResponse.ok) {
+                const uploadData = await uploadResponse.json();
+                alert('File uploaded successfully!');
+                alert('Download link: ' + uploadData.data.link);
+            } else {
+                alert('Error uploading file.');
+            }
         }
     </script>
 </body>
